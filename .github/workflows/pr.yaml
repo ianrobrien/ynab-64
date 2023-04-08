@@ -7,14 +7,6 @@ on:
       - main
 
 jobs:
-  markdownlint:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
-      - uses: DavidAnson/markdownlint-cli2-action@v9
-        with:
-          globs: '**/*.md'
-
   vale:
     runs-on: ubuntu-latest
     steps:
@@ -26,3 +18,17 @@ jobs:
           vale_flags: "--glob=*.{md,txt}"
         env:
           GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
+
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          # Full git history is needed to get a proper list of changed files
+          # within `super-linter`
+          fetch-depth: 0
+      - uses: github/super-linter@v4
+        env:
+          DEFAULT_BRANCH: main
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          SUPPRESS_POSSUM: true

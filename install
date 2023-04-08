@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 # 64-bit YNAB 4 converter shell script for macOS
 # SHELL SCRIPT VERSION: 1.0
@@ -18,8 +18,8 @@ AIR_MD5="ab54e66e43ccd463d3b582b854afd27c"
 
 install() {
 
-echo "=========================================================="
-cat <<EOF
+  echo "=========================================================="
+  cat <<EOF
               ____    ___        _     _ _
              / ___|  /   |      | |   (_) |
             / /___  / /| |______| |__  _| |_
@@ -27,16 +27,16 @@ cat <<EOF
             | \_/ |\___  |      | |_) | | |_
             \_____/    |_/      |_.__/|_|\__|
 EOF
-echo "=========================================================="
-echo "===== 64-bit YNAB 4 converter shell script for macOS ====="
-echo "=========================================================="
-echo "> This shell script will:"
-echo "> 1. Download the 32-bit version of YNAB 4 ($APP_SIZE)"
-echo "> 2. Download the 64-bit Adobe AIR runtime ($AIR_SIZE)"
-echo "> 3. Convert the 32-bit app to a native 64-bit app"
-echo "> 4. You must drag the app to /Applications directory"
-echo "=========================================================="
-cat <<EOF
+  echo "=========================================================="
+  echo "===== 64-bit YNAB 4 converter shell script for macOS ====="
+  echo "=========================================================="
+  echo "> This shell script will:"
+  echo "> 1. Download the 32-bit version of YNAB 4 ($APP_SIZE)"
+  echo "> 2. Download the 64-bit Adobe AIR runtime ($AIR_SIZE)"
+  echo "> 3. Convert the 32-bit app to a native 64-bit app"
+  echo "> 4. You must drag the app to /Applications directory"
+  echo "=========================================================="
+  cat <<EOF
 IMPORTANT NOTE: This shell script is not affiliated with
 YNAB in any way and YNAB has not endorsed this at all.
 You Need a Budget and YNAB are registered trademarks of
@@ -51,72 +51,72 @@ OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR
 OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
 SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 EOF
-echo "=========================================================="
-read -p "Press [ENTER] to continue or [CTRL+C] to cancel"
+  echo "=========================================================="
+  read -r -p "Press [ENTER] to continue or [CTRL+C] to cancel"
 
-# Download YNAB 4
-echo "> Downloading '$APP_FILE'"
-APP_DMG=$(download "$APP_FILE" "$APP_URL1" "$APP_MD5" "$TMPDIR") || \
-APP_DMG=$(download "$APP_FILE" "$APP_URL2" "$APP_MD5" "$TMPDIR") || die "Error downloading dependency '$APP_FILE'. Try again."
+  # Download YNAB 4
+  echo "> Downloading '$APP_FILE'"
+  APP_DMG=$(download "$APP_FILE" "$APP_URL1" "$APP_MD5" "$TMPDIR") ||
+    APP_DMG=$(download "$APP_FILE" "$APP_URL2" "$APP_MD5" "$TMPDIR") || die "Error downloading dependency '$APP_FILE'. Try again."
 
-# Download Adobe AIR runtime
-echo "> Downloading '$AIR_FILE'"
-AIR_DMG=$(download "$AIR_FILE" "$AIR_URL1" "$AIR_MD5" "$TMPDIR") || \
-AIR_DMG=$(download "$AIR_FILE" "$AIR_URL2" "$AIR_MD5" "$TMPDIR") || die "Error downloading dependency '$AIR_FILE'. Try again."
+  # Download Adobe AIR runtime
+  echo "> Downloading '$AIR_FILE'"
+  AIR_DMG=$(download "$AIR_FILE" "$AIR_URL1" "$AIR_MD5" "$TMPDIR") ||
+    AIR_DMG=$(download "$AIR_FILE" "$AIR_URL2" "$AIR_MD5" "$TMPDIR") || die "Error downloading dependency '$AIR_FILE'. Try again."
 
-# Extract YNAB 4 package
-echo "> Extracting the 32-bit app from $APP_FILE"
-VOLUME=$(hdiutil attach $APP_DMG | grep Volumes | awk 'BEGIN {FS="\t"}; {print $3}')
-cp -a "$VOLUME/YNAB 4.app" "$TMPDIR/"
-hdiutil detach "$VOLUME"
-APP_DIR="$TMPDIR/YNAB 4.app"
+  # Extract YNAB 4 package
+  echo "> Extracting the 32-bit app from $APP_FILE"
+  VOLUME=$(hdiutil attach "$APP_DMG" | grep Volumes | awk 'BEGIN {FS="\t"}; {print $3}')
+  cp -a "$VOLUME/YNAB 4.app" "$TMPDIR/"
+  hdiutil detach "$VOLUME"
+  APP_DIR="$TMPDIR/YNAB 4.app"
 
-# Install 64-bit Adobe AIR framework
-echo "> Extracting the 64-bit Adobe AIR runtime from $AIR_FILE"
-rm -rf "$APP_DIR/Contents/Frameworks/Adobe AIR.framework"
-VOLUME=$(hdiutil attach $AIR_DMG | grep Volumes | awk 'BEGIN {FS="\t"}; {print $3}')
-cp -a "$VOLUME/Adobe AIR Installer.app/Contents/Frameworks/Adobe AIR.framework" "$APP_DIR/Contents/Frameworks/"
-hdiutil detach "$VOLUME"
+  # Install 64-bit Adobe AIR framework
+  echo "> Extracting the 64-bit Adobe AIR runtime from $AIR_FILE"
+  rm -rf "$APP_DIR/Contents/Frameworks/Adobe AIR.framework"
+  VOLUME=$(hdiutil attach "$AIR_DMG" | grep Volumes | awk 'BEGIN {FS="\t"}; {print $3}')
+  cp -a "$VOLUME/Adobe AIR Installer.app/Contents/Frameworks/Adobe AIR.framework" "$APP_DIR/Contents/Frameworks/"
+  hdiutil detach "$VOLUME"
 
-echo "> Converting the 32-bit app to a native 64-bit app"
-PATCH="$TMPDIR/patch"
+  echo "> Converting the 32-bit app to a native 64-bit app"
+  PATCH="$TMPDIR/patch"
 
-# Patch and install 64-bit ExtendedAppEntryTemplate64
-rm "$APP_DIR/Contents/MacOS/YNAB 4"
-echo "$APPPATCH" | xxd -r -p - > "$PATCH"
-bspatch "$APP_DIR/Contents/Frameworks/Adobe AIR.framework/Versions/1.0/Resources/ExtendedAppEntryTemplate64" "$APP_DIR/Contents/MacOS/YNAB 4" "$PATCH"
-chmod 755 "$APP_DIR/Contents/MacOS/YNAB 4"
+  # Patch and install 64-bit ExtendedAppEntryTemplate64
+  rm "$APP_DIR/Contents/MacOS/YNAB 4"
+  echo "$APPPATCH" | xxd -r -p - >"$PATCH"
+  bspatch "$APP_DIR/Contents/Frameworks/Adobe AIR.framework/Versions/1.0/Resources/ExtendedAppEntryTemplate64" "$APP_DIR/Contents/MacOS/YNAB 4" "$PATCH"
+  chmod 755 "$APP_DIR/Contents/MacOS/YNAB 4"
 
-# Patch MacUtils extension to 64-bit
-sed -i '' 's/MacOS-x86/MacOS-x86-64/' "$APP_DIR/Contents/Resources/META-INF/AIR/extensions/mac/META-INF/ANE/extension.xml"
-mv "$APP_DIR/Contents/Resources/META-INF/AIR/extensions/mac/META-INF/ANE/MacOS-x86" "$APP_DIR/Contents/Resources/META-INF/AIR/extensions/mac/META-INF/ANE/MacOS-x86-64"
-MAC_PATH="$APP_DIR/Contents/Resources/META-INF/AIR/extensions/mac/META-INF/ANE/MacOS-x86-64/MacUtilsNativeExtension.framework/Versions/A"
-echo "$MACPATCH" | xxd -r -p - > "$PATCH"
-bspatch "$MAC_PATH/MacUtilsNativeExtension" "$MAC_PATH/MacUtilsNativeExtension" "$PATCH"
-rm -rf "$MAC_PATH/Resources/English.lproj"
-rm -rf "$MAC_PATH/_CodeSignature"
+  # Patch MacUtils extension to 64-bit
+  sed -i '' 's/MacOS-x86/MacOS-x86-64/' "$APP_DIR/Contents/Resources/META-INF/AIR/extensions/mac/META-INF/ANE/extension.xml"
+  mv "$APP_DIR/Contents/Resources/META-INF/AIR/extensions/mac/META-INF/ANE/MacOS-x86" "$APP_DIR/Contents/Resources/META-INF/AIR/extensions/mac/META-INF/ANE/MacOS-x86-64"
+  MAC_PATH="$APP_DIR/Contents/Resources/META-INF/AIR/extensions/mac/META-INF/ANE/MacOS-x86-64/MacUtilsNativeExtension.framework/Versions/A"
+  echo "$MACPATCH" | xxd -r -p - >"$PATCH"
+  bspatch "$MAC_PATH/MacUtilsNativeExtension" "$MAC_PATH/MacUtilsNativeExtension" "$PATCH"
+  rm -rf "$MAC_PATH/Resources/English.lproj"
+  rm -rf "$MAC_PATH/_CodeSignature"
 
-# Patch Sparkle extension to 64-bit
-sed -i '' 's/MacOS-x86/MacOS-x86-64/' "$APP_DIR/Contents/Resources/META-INF/AIR/extensions/sparkle/META-INF/ANE/extension.xml"
-mv "$APP_DIR/Contents/Resources/META-INF/AIR/extensions/sparkle/META-INF/ANE/MacOS-x86" "$APP_DIR/Contents/Resources/META-INF/AIR/extensions/sparkle/META-INF/ANE/MacOS-x86-64"
-SPARKLE_PATH="$APP_DIR/Contents/Resources/META-INF/AIR/extensions/sparkle/META-INF/ANE/MacOS-x86-64/SparkleNativeExtension.framework/Versions/A"
-echo "$SPARKLEPATCH" | xxd -r -p - > "$PATCH"
-bspatch "$SPARKLE_PATH/SparkleNativeExtension" "$SPARKLE_PATH/SparkleNativeExtension" "$PATCH"
-rm -rf "$SPARKLE_PATH/Resources/English.lproj"
-rm -rf "$SPARKLE_PATH/_CodeSignature"
-rm -rf "$SPARKLE_PATH/Frameworks"
+  # Patch Sparkle extension to 64-bit
+  sed -i '' 's/MacOS-x86/MacOS-x86-64/' "$APP_DIR/Contents/Resources/META-INF/AIR/extensions/sparkle/META-INF/ANE/extension.xml"
+  mv "$APP_DIR/Contents/Resources/META-INF/AIR/extensions/sparkle/META-INF/ANE/MacOS-x86" "$APP_DIR/Contents/Resources/META-INF/AIR/extensions/sparkle/META-INF/ANE/MacOS-x86-64"
+  SPARKLE_PATH="$APP_DIR/Contents/Resources/META-INF/AIR/extensions/sparkle/META-INF/ANE/MacOS-x86-64/SparkleNativeExtension.framework/Versions/A"
+  echo "$SPARKLEPATCH" | xxd -r -p - >"$PATCH"
+  bspatch "$SPARKLE_PATH/SparkleNativeExtension" "$SPARKLE_PATH/SparkleNativeExtension" "$PATCH"
+  rm -rf "$SPARKLE_PATH/Resources/English.lproj"
+  rm -rf "$SPARKLE_PATH/_CodeSignature"
+  rm -rf "$SPARKLE_PATH/Frameworks"
 
-INSTALLDIR=$(mktemp -d)
-if [ ! -d "$INSTALLDIR" ]; then
+  INSTALLDIR=$(mktemp -d)
+  if [ ! -d "$INSTALLDIR" ]; then
     die "> Failed to create temp directory"
-fi
+  fi
 
-mv "$APP_DIR" "$INSTALLDIR" || die "> Error saving 'YNAB 4.app'"
-ln -s "/Applications" "$INSTALLDIR/Applications"
-touch "$INSTALLDIR/DRAG APP TO APPLICATIONS DIR"
+  mv "$APP_DIR" "$INSTALLDIR" || die "> Error saving 'YNAB 4.app'"
+  ln -s "/Applications" "$INSTALLDIR/Applications"
+  touch "$INSTALLDIR/DRAG APP TO APPLICATIONS DIR"
 
-echo "=========================================================="
-cat <<EOF
+  echo "=========================================================="
+  cat <<EOF
                    _                  _
                   | |                | |
                 __| | ___  _ __   ___| |
@@ -124,31 +124,31 @@ cat <<EOF
               | (_| | (_) | | | |  __/_|
                \__,_|\___/|_| |_|\___(_)
 EOF
-echo "=========================================================="
-echo "> The app 'YNAB 4.app' has been saved to:"
-echo "> \"$INSTALLDIR\""
-echo "> Drag the app to your /Applications directory to install"
-echo "=========================================================="
+  echo "=========================================================="
+  echo "> The app 'YNAB 4.app' has been saved to:"
+  echo "> \"$INSTALLDIR\""
+  echo "> Drag the app to your /Applications directory to install"
+  echo "=========================================================="
 
-read -p "Press [ENTER] to open the folder containing the app"
-open -R "$INSTALLDIR/YNAB 4.app"
-echo "> Done!"
+  read -r -p "Press [ENTER] to open the folder containing the app"
+  open -R "$INSTALLDIR/YNAB 4.app"
+  echo "> Done!"
 
 }
 
 download() {
   FILE=$4/$1
 
-  (cd $4 && curl -L $2 -O)
+  (cd "$4" && curl -L "$2" -O)
 
   if [ ! -f "$FILE" ]; then
     exit 1
   else
     MD5=$(md5 "$FILE" | awk '{print $4}')
-    if [ ! $3 == $MD5 ]; then
+    if [ ! "$3" == "$MD5" ]; then
       exit 1
     else
-	  echo "$FILE"
+      echo "$FILE"
     fi
   fi
 }
@@ -160,11 +160,11 @@ die() {
 
 TMPDIR=$(mktemp -d)
 if [ ! -d "$TMPDIR" ]; then
-    die "> Failed to create temp directory"
+  die "> Failed to create temp directory"
 fi
 
 trap clean EXIT
-function clean() {
+clean() {
   if [ -d "$TMPDIR" ]; then
     rm -rf "$TMPDIR"
   fi
