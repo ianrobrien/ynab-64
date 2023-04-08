@@ -4,7 +4,7 @@
 # SHELL SCRIPT VERSION: 1.0
 # 64-BIT APP VERSION 1.0
 
-APP_URL1="https://classic.youneedabudget.com/CDNOrigin/download/ynab4/liveCaptive/Mac/YNAB4_LiveCaptive_4.3.855.dmg"
+APP_URL1="https://www-assets.youneedabudget.com/ynab4/YNAB4_LiveCaptive_4.3.855.dmg"
 APP_URL2="https://web.archive.org/web/20190613044706/https://classic.youneedabudget.com/CDNOrigin/download/ynab4/liveCaptive/Mac/YNAB4_LiveCaptive_4.3.855.dmg"
 APP_FILE="YNAB4_LiveCaptive_4.3.855.dmg"
 APP_SIZE="28MB"
@@ -20,11 +20,11 @@ install() {
 
 echo "=========================================================="
 cat <<EOF
-              ____    ___        _     _ _   
-             / ___|  /   |      | |   (_) |  
-            / /___  / /| |______| |__  _| |_ 
+              ____    ___        _     _ _
+             / ___|  /   |      | |   (_) |
+            / /___  / /| |______| |__  _| |_
             | ___ \/ /_| |______| '_ \| | __|
-            | \_/ |\___  |      | |_) | | |_ 
+            | \_/ |\___  |      | |_) | | |_
             \_____/    |_/      |_.__/|_|\__|
 EOF
 echo "=========================================================="
@@ -37,18 +37,18 @@ echo "> 3. Convert the 32-bit app to a native 64-bit app"
 echo "> 4. You must drag the app to /Applications directory"
 echo "=========================================================="
 cat <<EOF
-IMPORTANT NOTE: This shell script is not affiliated with 
-YNAB in any way and YNAB has not endorsed this at all. 
-You Need a Budget and YNAB are registered trademarks of 
+IMPORTANT NOTE: This shell script is not affiliated with
+YNAB in any way and YNAB has not endorsed this at all.
+You Need a Budget and YNAB are registered trademarks of
 You Need A Budget LLC and/or one of its subsidiaries.
 
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY 
-KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE 
-WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR 
-PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS 
-OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR 
-OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR 
-OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE 
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY
+KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
+WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR
+PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS
+OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR
+OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR
+OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
 SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 EOF
 echo "=========================================================="
@@ -117,7 +117,7 @@ touch "$INSTALLDIR/DRAG APP TO APPLICATIONS DIR"
 
 echo "=========================================================="
 cat <<EOF
-                   _                  _ 
+                   _                  _
                   | |                | |
                 __| | ___  _ __   ___| |
                / _  |/ _ \|  _ \ / _ \ |
